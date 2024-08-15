@@ -4,13 +4,16 @@ import android.content.Context
 import android.location.Location
 import android.service.controls.ControlsProviderService.TAG
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
@@ -29,6 +32,8 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -36,6 +41,8 @@ import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.filter
 import androidx.paging.map
+import coil.compose.AsyncImage
+import com.aadityaverma.solutionexplorer.R
 import com.aadityaverma.solutionexplorer.domain.LocationManager
 import com.aadityaverma.solutionexplorer.presentation.common.DetailList
 import com.aadityaverma.solutionexplorer.presentation.components.DistanceUtils
@@ -113,16 +120,34 @@ fun ExploreScreen(
                 }
             } else {
                 Log.d("ExploreScreen", "Loading complete")
-                SearchBar(
-                    query = searchQuery.value,
-                    onQueryChange = { searchQuery.value = it },
-                    onSearch = { /* Trigger search if needed */ },
-                    modifier = Modifier.padding(bottom = 24.dp),
-                    placeholder = { Text("Search", color = MaterialTheme.colorScheme.primary) },
-                    active = false,
-                    colors = SearchBarDefaults.colors(Color(0xFFffc220)),
-                    onActiveChange = { /* Handle active state change */ }
-                ) {}
+                Row(
+                    verticalAlignment = Alignment.CenterVertically, // Align logo and search bar vertically centered
+                    modifier = Modifier.padding(bottom = 24.dp)
+                ) {
+                    AsyncImage(
+                        model = R.drawable.walmartlogo,
+                        contentDescription = "logo",
+                        modifier = Modifier
+                            .height(45.dp)
+                            .width(45.dp)
+                    )
+                    Spacer(modifier = Modifier.width(20.dp)) // Optional: Add some space between the logo and search bar
+                    SearchBar(
+                        query = searchQuery.value,
+                        onQueryChange = { searchQuery.value = it },
+                        onSearch = { /* Trigger search if needed */ },
+                        placeholder = {
+                            Text(
+                                "Search",
+                                color = Color.Black,
+                                style = TextStyle(fontWeight = FontWeight.Bold)
+                            )
+                        },
+                        active = false,
+                        colors = SearchBarDefaults.colors(Color(0xFFffc220)),
+                        onActiveChange = { /* Handle active state change */ }
+                    ){}
+                }
 
                 Spacer(modifier = Modifier.height(24.dp))
 

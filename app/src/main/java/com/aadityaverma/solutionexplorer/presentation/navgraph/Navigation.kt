@@ -29,8 +29,8 @@ fun Navigation() {
         bottomBar = {
             BottomNavigation(
                 items = listOf(
-                    BottomNavigationItem(R.drawable.baseline_explore_24, "Explore"),
-                    BottomNavigationItem(R.drawable.baseline_filter_list_24, "Refine"), // Add other items as needed
+                    BottomNavigationItem(R.drawable.baseline_home_24, "Home"),
+                    BottomNavigationItem(R.drawable.baseline_filter_list_24, "Filter"), // Add other items as needed
                 ),
                 selectedItem = selectedItem,
                 onItemClick = { index ->

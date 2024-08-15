@@ -19,7 +19,10 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+
 
 @Composable
 fun BottomNavigation(
@@ -29,7 +32,7 @@ fun BottomNavigation(
 ) {
     NavigationBar(
         modifier = Modifier.fillMaxWidth(),
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = Color(0xFFffc220),
         tonalElevation = 10.dp
     ) {
         items.forEachIndexed { index, item ->
@@ -44,7 +47,13 @@ fun BottomNavigation(
                             modifier = Modifier.size(20.dp),
                         )
                         Spacer(modifier = Modifier.height(3.dp))
-                        Text(text = item.text, style = MaterialTheme.typography.labelSmall)
+                        Text(
+                            text = item.text,
+                            style = MaterialTheme.typography.labelSmall.copy( // Copy the existing style
+                                fontWeight = FontWeight.Bold, // Set the font weight
+                            ),
+                            color = Color.Black, // Set the desired color
+                        )
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(
