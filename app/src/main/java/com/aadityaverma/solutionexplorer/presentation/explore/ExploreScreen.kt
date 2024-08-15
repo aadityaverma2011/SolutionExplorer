@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,6 +27,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -115,8 +118,9 @@ fun ExploreScreen(
                     onQueryChange = { searchQuery.value = it },
                     onSearch = { /* Trigger search if needed */ },
                     modifier = Modifier.padding(bottom = 24.dp),
-                    placeholder = { Text("Search") },
+                    placeholder = { Text("Search", color = MaterialTheme.colorScheme.primary) },
                     active = false,
+                    colors = SearchBarDefaults.colors(Color(0xFFffc220)),
                     onActiveChange = { /* Handle active state change */ }
                 ) {}
 

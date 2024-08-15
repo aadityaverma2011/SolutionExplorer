@@ -16,7 +16,7 @@ val Purple80 = Color(0xFF800080)
 val PurpleGrey80 = Color(0xFF808080)
 val Pink80 = Color(0xFFFFC0CB)
 
-val Purple40 = Color(0xFF400080)
+val Purple40 = Color(0xFFFFEB3B)
 val PurpleGrey40 = Color(0xFF404040)
 val Pink40 = Color(0xFFFFB6C1)
 
@@ -29,7 +29,8 @@ private val DarkColorScheme = darkColorScheme(
 private val LightColorScheme = lightColorScheme(
     primary = Purple40,
     secondary = PurpleGrey40,
-    tertiary = Pink40
+    tertiary = Pink40,
+    background = newcolor3,
 )
 
 @Composable
