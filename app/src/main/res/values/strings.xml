@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Solution Explorer</string>
+    <string name="AvailabilityText">Select Your Availability</string>
+    <string name="StatusText">Add Your Status</string>
+    <string name="StatusPlaceholder">Hi Community</string>
+    <string name="DistanceSelect">Select Hyper Local Distance</string>
+    <string name="PurposeSelect">Select Purpose</string>
+    <string name="Save">Save And Explore</string>
+</resources>

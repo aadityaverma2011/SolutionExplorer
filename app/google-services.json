@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "387038693164",
+    "project_id": "newproject-d9bf4",
+    "storage_bucket": "newproject-d9bf4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:387038693164:android:73940a0fe87512e7950e89",
+        "android_client_info": {
+          "package_name": "com.aadityaverma.solutionexplorer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFdrVO-kxfWt73CnfWpypmI0l9-Xk9ci4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
