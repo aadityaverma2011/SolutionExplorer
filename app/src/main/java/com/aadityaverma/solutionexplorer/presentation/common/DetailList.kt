@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.paging.LoadState
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.paging.compose.LazyPagingItems
 
 import com.aadityaverma.solutionexplorer.data.datasource.Product
@@ -41,9 +42,9 @@ fun handlePagingResult(details: LazyPagingItems<Product>): Boolean {
 fun DetailList(
     modifier: Modifier = Modifier,
     details: LazyPagingItems<Product>,
-    onClick: (Product) -> Unit // Update this to pass the clicked product
+    onClick: (Product) -> Unit,
+    navController: NavController // Add NavController
 ) {
-    val context = LocalContext.current
     val handlePagingResult = handlePagingResult(details = details)
     if (handlePagingResult) {
         LazyColumn(
@@ -52,12 +53,12 @@ fun DetailList(
             contentPadding = PaddingValues(all = 3.dp)
         ) {
             items(details.itemCount) { index ->
-                details[index]?.let {
+                details[index]?.let { product ->
                     SolutionExplorerTheme {
                         DetailCard(
-                            detail = it,
+                            detail = product,
                             onClick = {
-                                onClick(it) // Pass the clicked product to the onClick handler
+                                navController.navigate("view_screen/${product.productId}")
                             }
                         )
                     }

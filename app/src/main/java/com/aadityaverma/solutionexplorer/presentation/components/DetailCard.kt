@@ -57,7 +57,6 @@ import com.aadityaverma.solutionexplorer.ui.theme.newColor2
 
 import com.aadityaverma.solutionexplorer.data.datasource.Product
 import com.aadityaverma.solutionexplorer.domain.LocationManager
-import com.aadityaverma.solutionexplorer.presentation.SharedViewModel
 import com.aadityaverma.solutionexplorer.presentation.navgraph.Screen
 import kotlinx.coroutines.launch
 import org.jetbrains.annotations.Async

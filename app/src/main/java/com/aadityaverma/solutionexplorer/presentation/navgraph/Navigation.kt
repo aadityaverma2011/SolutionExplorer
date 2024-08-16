@@ -19,6 +19,8 @@ import com.aadityaverma.solutionexplorer.presentation.explore.ExploreViewModel
 import com.aadityaverma.solutionexplorer.presentation.navgraph.components.BottomNavigation
 import com.aadityaverma.solutionexplorer.presentation.navgraph.components.BottomNavigationItem
 import com.aadityaverma.solutionexplorer.presentation.refine.RefineScreen
+import com.aadityaverma.solutionexplorer.presentation.view.ViewScreen
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun Navigation() {
@@ -35,10 +37,9 @@ fun Navigation() {
                 selectedItem = selectedItem,
                 onItemClick = { index ->
                     selectedItem.value = index
-                    // Handle navigation
                     when (index) {
                         0 -> navController.navigate(Screen.ExploreScreen.route)
-                        1 -> navController.navigate(Screen.RefineScreen.route) // Add other routes as needed
+                        1 -> navController.navigate(Screen.RefineScreen.route)
                     }
                 }
             )
@@ -50,26 +51,18 @@ fun Navigation() {
             Modifier.fillMaxSize()
         ) {
             composable(Screen.ExploreScreen.route) {
-
                 val viewModel: ExploreViewModel = hiltViewModel()
-                val state = viewModel.state.value
-                ExploreScreen(navController = navController,viewModel, selectedDistance = Int.MAX_VALUE)
+                ExploreScreen(navController = navController, viewModel = viewModel, selectedDistance = Int.MAX_VALUE)
             }
             composable(Screen.RefineScreen.route) {
                 RefineScreen(navController = navController)
             }
             composable(
-                "explore_screen/{selectedDistance}/{selectedChips}",
-                arguments = listOf(
-                    navArgument("selectedDistance") { type = NavType.IntType },
-                    navArgument("selectedChips") { type = NavType.StringType }
-                )
+                "view_screen/{productId}",
+                arguments = listOf(navArgument("productId") { type = NavType.StringType })
             ) { backStackEntry ->
-                val selectedDistance = backStackEntry.arguments?.getInt("selectedDistance") ?: 0
-                val selectedChips = backStackEntry.arguments?.getString("selectedChips") ?: ""
-                val viewModel: ExploreViewModel = hiltViewModel()
-                val state = viewModel.state.value
-                ExploreScreen(navController = navController,viewModel, selectedDistance = selectedDistance)
+                val productId = backStackEntry.arguments?.getString("productId") ?: return@composable
+                ViewScreen(navController = navController, productId = productId)
             }
         }
     }

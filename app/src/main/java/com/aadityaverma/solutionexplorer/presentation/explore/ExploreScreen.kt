@@ -104,7 +104,7 @@ fun ExploreScreen(
                     modifier = Modifier.padding(bottom = 24.dp)
                 ) {
                     AsyncImage(
-                        model = R.drawable.walmartlogo,
+                        model = R.drawable.sun,
                         contentDescription = "logo",
                         modifier = Modifier
                             .height(45.dp)
@@ -135,7 +135,8 @@ fun ExploreScreen(
 
                     DetailList(
                         details = details,
-                        onClick = { /* Handle item click */ }
+                        onClick = { /* Handle item click */ },
+                        navController = navController
                     )
                 }
             }
