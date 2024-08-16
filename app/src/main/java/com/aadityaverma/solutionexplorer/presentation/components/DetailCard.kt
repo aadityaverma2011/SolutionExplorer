@@ -48,13 +48,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.core.graphics.toColorInt
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.aadityaverma.solutionexplorer.R
 import com.aadityaverma.solutionexplorer.ui.theme.newColor
 import com.aadityaverma.solutionexplorer.ui.theme.newColor2
 
-import com.aadityaverma.solutionexplorer.data.datasource.Detail
+
+import com.aadityaverma.solutionexplorer.data.datasource.Product
 import com.aadityaverma.solutionexplorer.domain.LocationManager
+import com.aadityaverma.solutionexplorer.presentation.SharedViewModel
+import com.aadityaverma.solutionexplorer.presentation.navgraph.Screen
 import kotlinx.coroutines.launch
 import org.jetbrains.annotations.Async
 
@@ -67,10 +71,9 @@ fun String.toColor(): Color {
 }
 @Composable
 fun DetailCard(
-    modifier: Modifier = Modifier,
-    detail: Detail,
-    onClick: (() -> Unit)? = null
-) {
+    detail: Product,
+    onClick: (Product) -> Unit // Change this to pass the product on click
+){
     val gradientBrush = Brush.linearGradient(
         colors = listOf(Color.LightGray, Color.White ),
         start = Offset.Zero,
@@ -78,17 +81,16 @@ fun DetailCard(
     )
 
     Card(
-        modifier = modifier
-            .clickable { onClick?.invoke() }
-            .padding(8.dp).padding(8.dp).drawSharpCorners(
-                topLeft = true,
-                bottomRight = true,
-                color = Color.LightGray// Background color for sharp corners
-            ),
+        modifier = Modifier.clickable {onClick(detail) }
+            .padding(8.dp),
+//            .drawSharpCorners(
+//                topLeft = true,
+//                bottomRight = true,
+//                color = Color.LightGray // Background color for sharp corners
+//            ),
         elevation = CardDefaults.cardElevation(4.dp),
         shape = MaterialTheme.shapes.large,
         colors = CardDefaults.cardColors(containerColor = Color.Transparent), // Make containerColor transparent
-
     ) {
         Box(
             modifier = Modifier
@@ -97,8 +99,7 @@ fun DetailCard(
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxSize()
+                modifier = Modifier.fillMaxSize()
             ) {
                 Box(
                     modifier = Modifier
@@ -110,7 +111,7 @@ fun DetailCard(
                         modifier = Modifier
                             .fillMaxSize()
                             .clip(MaterialTheme.shapes.medium),
-                        model = R.drawable.profile,
+                        model = detail.productImageUrl,
                         contentDescription = "",
                         contentScale = ContentScale.Crop
                     )
@@ -122,7 +123,7 @@ fun DetailCard(
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(
-                        text = detail.name.takeIf { it.isNotEmpty() } ?: "null",
+                        text = detail.productName ?: "null",
                         maxLines = 1,
                         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                         color = Color.Black,
@@ -133,125 +134,77 @@ fun DetailCard(
                             .width(140.dp)
                     )
                     Row {
-                        Text(
-                            text = detail.location.takeIf { it.isNotEmpty() } ?: "null",
-                            maxLines = 1,
-                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Normal),
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                        AsyncImage(model = R.drawable.divider, contentDescription = "divider", modifier = Modifier.size(8.dp).align(Alignment.CenterVertically))
-                        Text(
-                            modifier = Modifier.align(alignment = Alignment.CenterVertically),
-                            text = detail.profession.takeIf { it.isNotEmpty() } ?: "null",
-                            maxLines = 1,
-                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
+//                        Text(
+//                            text = (detail.availableAt ?: "null") + " Store",
+//                            maxLines = 1,
+//                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Normal),
+//                            color = MaterialTheme.colorScheme.onSurface
+//                        )
                     }
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = "${detail.calculateddistance.toInt()} km away",
-                        maxLines = 1,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
+//                    Spacer(modifier = Modifier.height(4.dp))
+//                    Text(
+//                        text = "At ${detail.aisle ?: "null"}",
+//                        maxLines = 1,
+//                        style = MaterialTheme.typography.bodySmall,
+//                        color = MaterialTheme.colorScheme.onSurface
+//                    )
+//                    Spacer(modifier = Modifier.height(8.dp))
 
-                    Text(text = "Profile", style = MaterialTheme.typography.labelSmall)
-                    LinearProgressIndicator(
-                        progress = detail.completion / 100f, // Assuming detail.completion ranges from 0 to 100
-                        modifier = Modifier.width(140.dp).clip(shape = MaterialTheme.shapes.extraLarge),
-                        color = Color.Black,
-                    )
+                    Text(text = "Rs ${detail.price.toString()}", style = MaterialTheme.typography.headlineSmall.copy(fontWeight = Bold))
 
                     Spacer(modifier = Modifier.height(8.dp))
-
-                    // Display hobbies in a row
-                    Row(modifier = Modifier.fillMaxWidth()) {
-                        var count = 3
-                        detail.hobbies?.take(3)?.forEach { hobby ->
-                            Row(
-                                modifier = Modifier
-                            ) {
-                                AsyncImage(
-                                    model = hobby.iconUrl,
-                                    contentDescription = "icon",
-                                    Modifier.size(12.dp)
-                                )
-                                Spacer(modifier = Modifier.width(4.dp))
-                                Text(
-                                    text = hobby.name,
-                                    maxLines = 1,
-                                    style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
-                                    color = parseColorSafe(hobby.color)
-                                )
-                                count -= 1
-                                if (count >= 1) {
-                                    AsyncImage(model = R.drawable.divider, contentDescription = "divider", modifier = Modifier.size(8.dp).align(Alignment.CenterVertically))
-                                }
-                            }
-                        }
-                    }
 
                     Spacer(
                         modifier = Modifier
                             .height(4.dp)
                             .zIndex(999f)
                     )
-                    Text(
-                        modifier = Modifier.zIndex(999f),
-                        text = detail.status.takeIf { it.isNotEmpty() } ?: "null",
-                        maxLines = 2,
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            fontWeight = FontWeight.Bold
-                        ),
-                        color = MaterialTheme.colorScheme.primary,
-                    )
                 }
-
-                Column(
-                    verticalArrangement = Arrangement.Top,
-                    horizontalAlignment = Alignment.End
-                ) {
-                    AsyncImage(
-                        model = R.drawable.invite,
-                        contentDescription = "",
-                        modifier = Modifier.size(24.dp).clickable { /* Handle click */ },
-                    )
-                }
+//
+//                Column(
+//                    verticalArrangement = Arrangement.Top,
+//                    horizontalAlignment = Alignment.End
+//                ) {
+//                    AsyncImage(
+//                        model = R.drawable.invite,
+//                        contentDescription = "",
+//                        modifier = Modifier
+//                            .size(24.dp)
+//                            .clickable { /* Handle click */ },
+//                    )
+//                }
             }
         }
     }
 }
 
-
-fun Modifier.drawSharpCorners(
-    topLeft: Boolean = false,
-    bottomRight: Boolean = false,
-    color: Color = Color.Transparent
-) = this.then(
-    Modifier.drawBehind {
-        val radius = 16.dp.toPx() // Adjust radius as needed
-
-        drawRoundRect(
-            color = color,
-            size = size,
-            cornerRadius = CornerRadius(
-                x = if (topLeft) radius else 0f,
-                y = if (topLeft) radius else 0f
-            )
-        )
-        drawRoundRect(
-            color = color,
-            size = size,
-            cornerRadius = CornerRadius(
-                x = if (bottomRight) radius else 0f,
-                y = if (bottomRight) radius else 0f
-            ),
-            topLeft = if (topLeft) Offset(radius, radius) else Offset.Zero,
-        )
-    }
-)
+//fun Modifier.drawSharpCorners(
+//    topLeft: Boolean = false,
+//    bottomRight: Boolean = false,
+//    color: Color = Color.Transparent
+//) = this.then(
+//    Modifier.drawBehind {
+//        val radius = 16.dp.toPx() // Adjust radius as needed
+//
+//        drawRoundRect(
+//            color = color,
+//            size = size,
+//            cornerRadius = CornerRadius(
+//                x = if (topLeft) radius else 0f,
+//                y = if (topLeft) radius else 0f
+//            )
+//        )
+//        drawRoundRect(
+//            color = color,
+//            size = size,
+//            cornerRadius = CornerRadius(
+//                x = if (bottomRight) radius else 0f,
+//                y = if (bottomRight) radius else 0f
+//            ),
+//            topLeft = if (topLeft) Offset(radius, radius) else Offset.Zero,
+//        )
+//    }
+//)
 fun parseColorSafe(colorString: String): Color {
     return try {
         if (colorString.startsWith("rgb")) {

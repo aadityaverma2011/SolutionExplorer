@@ -1,8 +1,9 @@
 package com.aadityaverma.solutionexplorer.data.response
 
-import com.aadityaverma.solutionexplorer.data.datasource.Detail
+
+import com.aadityaverma.solutionexplorer.data.datasource.Product
 
 data class ApiResponse(
-    val data: List<Detail>?,
+    val data: List<Product>?,
     val error: String?
 )

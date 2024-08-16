@@ -47,59 +47,38 @@ import com.aadityaverma.solutionexplorer.domain.LocationManager
 import com.aadityaverma.solutionexplorer.presentation.common.DetailList
 import com.aadityaverma.solutionexplorer.presentation.components.DistanceUtils
 import com.aadityaverma.solutionexplorer.ui.theme.SolutionExplorerTheme
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExploreScreen(
     navController: NavController,
     viewModel: ExploreViewModel = hiltViewModel(), // Use the ViewModel
-    selectedDistance: Int,
-    selectedChips: String
+    selectedDistance: Int
 ) {
     SolutionExplorerTheme {
 
         val state by viewModel.state // Collect state from ViewModel
         val searchQuery = remember { mutableStateOf("") }
         val coroutineScope = rememberCoroutineScope()
-        val currentLocation = remember { mutableStateOf<Location?>(null) }
-        val context = LocalContext.current
 
-        LaunchedEffect(Unit) {
-            if (LocationManager.isLocationPermissionGranted(context)) {
-                LocationManager.getLastLocation { location ->
-                    location?.let {
-                        currentLocation.value = it
-                    }
-                }
-            }
-        }
-
-        val filteredDetailsFlow = remember(searchQuery.value, state.details, currentLocation.value) {
+        val filteredDetailsFlow = remember(searchQuery.value, state.details) {
+            Log.d("ExploreScreen", "State details: ${state.details}")
             state.details?.map { pagingData ->
-                val currentLocation = currentLocation.value
+                Log.d("ExploreScreen", "PagingData: $pagingData")
                 pagingData.map { detail ->
-                    val distance = currentLocation?.let {
-                        DistanceUtils.calculateDistance(
-                            it.latitude,
-                            it.longitude,
-                            detail.distance[0].toDouble(),
-                            detail.distance[1].toDouble()
-                        )
-                    } ?: 0f
-                    detail.copy(calculateddistance = distance)
+                    Log.d("ExploreScreen", "Detail: $detail")
+                    detail
                 }.filter { detail ->
-                    (searchQuery.value.isEmpty() ||
-                            detail.name.contains(searchQuery.value, ignoreCase = true) ||
-                            detail.profession.contains(searchQuery.value, ignoreCase = true) ||
-                            detail.location.contains(searchQuery.value, ignoreCase = true) ||
-                            detail.calculateddistance.toString().contains(searchQuery.value, ignoreCase = true) ||
-                            detail.safeHobbies.any { hobby ->
-                                hobby.name.contains(searchQuery.value, ignoreCase = true)
-                            }) &&
-                            detail.calculateddistance <= selectedDistance &&
-                            selectedChips.split(",").map { it.trim() }.any { chip -> detail.safeHobbies.any { it.name == chip } }
+                    Log.d("ExploreScreen", "Filtering detail: $detail")
+                    val productNameMatches = searchQuery.value.isEmpty() ||
+                            detail.productName.contains(searchQuery.value, ignoreCase = true)
+                    val aisleMatches = detail.aisle?.contains(searchQuery.value, ignoreCase = true) == true
+                    val availableAtMatches = detail.availableAt.contains(searchQuery.value, ignoreCase = true)
+                    productNameMatches || aisleMatches || availableAtMatches
                 }
-            }
+            } ?: emptyFlow()
         }
 
         Column(

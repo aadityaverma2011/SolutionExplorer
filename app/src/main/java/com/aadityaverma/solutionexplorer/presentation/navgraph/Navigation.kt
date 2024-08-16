@@ -53,7 +53,7 @@ fun Navigation() {
 
                 val viewModel: ExploreViewModel = hiltViewModel()
                 val state = viewModel.state.value
-                ExploreScreen(navController = navController,viewModel, selectedDistance = Int.MAX_VALUE, selectedChips = listOf("Gym", "Friendship", "Horror", "Gaming", "Sports", "Business", "Yoga", "Singing").toString())
+                ExploreScreen(navController = navController,viewModel, selectedDistance = Int.MAX_VALUE)
             }
             composable(Screen.RefineScreen.route) {
                 RefineScreen(navController = navController)
@@ -69,7 +69,7 @@ fun Navigation() {
                 val selectedChips = backStackEntry.arguments?.getString("selectedChips") ?: ""
                 val viewModel: ExploreViewModel = hiltViewModel()
                 val state = viewModel.state.value
-                ExploreScreen(navController = navController,viewModel, selectedDistance = selectedDistance, selectedChips = selectedChips)
+                ExploreScreen(navController = navController,viewModel, selectedDistance = selectedDistance)
             }
         }
     }

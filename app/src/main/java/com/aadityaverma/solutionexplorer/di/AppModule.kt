@@ -20,7 +20,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    private val BaseUrl= "https://us-central1-newproject-d9bf4.cloudfunctions.net"
+    private val BaseUrl= "https://us-central1-walprototype.cloudfunctions.net"
 
     @Provides
     @Singleton

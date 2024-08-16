@@ -13,12 +13,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.paging.LoadState
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import com.aadityaverma.solutionexplorer.data.datasource.Detail
+
+import com.aadityaverma.solutionexplorer.data.datasource.Product
 import com.aadityaverma.solutionexplorer.presentation.components.DetailCard
 import com.aadityaverma.solutionexplorer.ui.theme.SolutionExplorerTheme
 
 @Composable
-fun handlePagingResult(details: LazyPagingItems<Detail>): Boolean {
+fun handlePagingResult(details: LazyPagingItems<Product>): Boolean {
     val loadState = details.loadState
     val error = when {
         loadState.refresh is LoadState.Error -> loadState.refresh as LoadState.Error
@@ -36,12 +37,11 @@ fun handlePagingResult(details: LazyPagingItems<Detail>): Boolean {
         }
     }
 }
-
 @Composable
 fun DetailList(
     modifier: Modifier = Modifier,
-    details: LazyPagingItems<Detail>,
-    onClick: () -> Unit
+    details: LazyPagingItems<Product>,
+    onClick: (Product) -> Unit // Update this to pass the clicked product
 ) {
     val context = LocalContext.current
     val handlePagingResult = handlePagingResult(details = details)
@@ -57,12 +57,10 @@ fun DetailList(
                         DetailCard(
                             detail = it,
                             onClick = {
-
-                            },
-
+                                onClick(it) // Pass the clicked product to the onClick handler
+                            }
                         )
                     }
-
                 }
             }
         }
